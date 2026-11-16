@@ -87,3 +87,39 @@ export function nextDueTime(lineIds: string[], color: DrillColor): number | unde
   const times = lineIds.map(id => getCard(id, color)?.due).filter((t): t is number => t !== undefined)
   return times.length ? Math.min(...times) : undefined
 }
+
+export interface CourseStats {
+  total: number
+  new: number
+  learning: number
+  due: number
+  learned: number
+}
+
+export function courseStats(lineIds: string[], color: DrillColor): CourseStats {
+  const s: CourseStats = { total: lineIds.length, new: 0, learning: 0, due: 0, learned: 0 }
+  const now = Date.now()
+  for (const id of lineIds) s[status(id, color, now)]++
+  return s
+}
+
+/** Lines to review now (due or still being learned), most overdue first. */
+export function dueLines(lineIds: string[], color: DrillColor): string[] {
+  const now = Date.now()
+  return lineIds
+    .map(id => ({ id, c: getCard(id, color) }))
+    .filter(x => x.c?.seen && x.c.due <= now)
+    .sort((a, b) => a.c!.due - b.c!.due)
+    .map(x => x.id)
+}
+
+/** Lines never studied, in course order. */
+export function newLines(lineIds: string[], color: DrillColor): string[] {
+  return lineIds.filter(id => !getCard(id, color)?.seen)
+}
+
+export function resetCourse(lineIds: string[]) {
+  const keys = new Set(lineIds.flatMap(id => [cardKey(id, 'white'), cardKey(id, 'black')]))
+  store = Object.fromEntries(Object.entries(store).filter(([k]) => !keys.has(k)))
+  save(store)
+}

@@ -1,59 +1,89 @@
 import { useCallback, useMemo, useState } from 'react'
-import DrillView from './components/DrillView'
-import LearnView from './components/LearnView'
 import { getLines, openings } from './openings'
 import { loadShowEval, saveShowEval } from './lib/evals'
+import { setTrainColor, trainColor } from './lib/prefs'
+import { useRoute } from './lib/route'
 import { isMuted, setMuted } from './lib/sound'
+import type { DrillColor } from './lib/srs'
 import { buildTree } from './lib/tree'
+import Course from './pages/Course'
+import Explore from './pages/Explore'
+import Home from './pages/Home'
+import Session, { type SessionMode } from './pages/Session'
+import { dueLines, newLines } from './lib/srs'
+import { LEARN_BATCH, REVIEW_BATCH } from './lib/prefs'
 
-type Mode = 'learn' | 'drill'
+interface ActiveSession {
+  mode: SessionMode
+  lineIds: string[]
+  nonce: number
+}
 
 export default function App() {
-  const [openingId, setOpeningId] = useState(openings[0].id)
-  const opening = openings.find(o => o.id === openingId)!
-  const lines = useMemo(() => getLines(opening), [opening])
+  const [route, go] = useRoute()
+  const opening = route.page === 'home' ? undefined : openings.find(o => o.id === route.id)
+  const lines = useMemo(() => (opening ? getLines(opening) : []), [opening])
   const tree = useMemo(() => buildTree(lines), [lines])
-  const [mode, setMode] = useState<Mode>('learn')
-  const [drillReq, setDrillReq] = useState<{ lineId: string; nonce: number }>()
-  const [learnKey, setLearnKey] = useState(0)
-  const [studyLine, setStudyLine] = useState<string>()
+  const [colorTick, setColorTick] = useState(0)
+  const color: DrillColor = opening ? trainColor(opening.id, opening.side) : 'white'
+  const [session, setSession] = useState<ActiveSession | null>(null)
   const [muted, setMutedState] = useState(isMuted)
   const [showEval, setShowEval] = useState(loadShowEval)
+  const [exploreLine, setExploreLine] = useState<string>()
   const toggleEval = useCallback(() => {
     setShowEval(v => {
       saveShowEval(!v)
       return !v
     })
   }, [])
-  const evalProps = { openingId: opening.id, showEval, onToggleEval: toggleEval }
+
+  const start = (mode: SessionMode, lineIds: string[]) => {
+    setSession({ mode, lineIds, nonce: Date.now() })
+    window.scrollTo(0, 0)
+  }
+
+  // Training takes over the whole screen.
+  if (session && opening) {
+    return (
+      <Session
+        key={session.nonce}
+        opening={opening}
+        lines={lines}
+        tree={tree}
+        color={color}
+        mode={session.mode}
+        lineIds={session.lineIds}
+        showEval={showEval}
+        onToggleEval={toggleEval}
+        onExit={() => {
+          setSession(null)
+          go({ page: 'course', id: opening.id })
+        }}
+        onNext={mode => {
+          const ids = lines.map(l => l.id)
+          const next = mode === 'review' ? dueLines(ids, color).slice(0, REVIEW_BATCH) : newLines(ids, color).slice(0, LEARN_BATCH)
+          if (next.length) start(mode, next)
+          else setSession(null)
+        }}
+      />
+    )
+  }
 
   return (
     <div className="app">
       <header className="top">
-        <div className="brand">
+        <button className="brand" onClick={() => go({ page: 'home' })}>
           <span className="logo">♞</span> Learn Chess Theory
-        </div>
-        {openings.length > 1 ? (
-          <select value={openingId} onChange={e => setOpeningId(e.target.value)}>
-            {openings.map(o => (
-              <option key={o.id} value={o.id}>{o.name}</option>
-            ))}
-          </select>
-        ) : (
-          <div className="opening-name" title={opening.description}>
-            {opening.name} <span className="muted">{opening.eco}</span>
-          </div>
-        )}
+        </button>
         <nav className="tabs">
-          <button className={mode === 'learn' ? 'active' : ''} onClick={() => setMode('learn')}>Learn</button>
-          <button className={mode === 'drill' ? 'active' : ''} onClick={() => {
-            setDrillReq(undefined)
-            setMode('drill')
-          }}>Drill</button>
+          <button className={route.page === 'home' ? 'active' : ''} onClick={() => go({ page: 'home' })}>
+            Openings
+          </button>
         </nav>
         <button
           className="icon"
           title={muted ? 'Sound off' : 'Sound on'}
+          aria-label={muted ? 'Turn sound on' : 'Turn sound off'}
           onClick={() => {
             setMuted(!muted)
             setMutedState(!muted)
@@ -63,30 +93,41 @@ export default function App() {
         </button>
       </header>
 
-      {mode === 'learn' ? (
-        <LearnView
-          key={`${opening.id}-${learnKey}`}
-          {...evalProps}
+      {route.page === 'home' || !opening ? (
+        <Home onOpen={id => go({ page: 'course', id })} />
+      ) : route.page === 'course' ? (
+        <Course
+          key={`${opening.id}-${colorTick}`}
+          opening={opening}
           lines={lines}
-          tree={tree}
-          initialLineId={studyLine}
-          onDrill={lineId => {
-            setDrillReq({ lineId, nonce: Date.now() })
-            setMode('drill')
+          color={color}
+          onColor={c => {
+            setTrainColor(opening.id, c)
+            setColorTick(t => t + 1)
           }}
+          onLearn={ids => start('learn', ids)}
+          onReview={ids => start('review', ids)}
+          onPractice={id => start('single', [id])}
+          onExplore={id => {
+            setExploreLine(id)
+            go({ page: 'explore', id: opening.id })
+          }}
+          onHome={() => go({ page: 'home' })}
         />
       ) : (
-        <DrillView
-          key={opening.id}
-          {...evalProps}
+        <Explore
+          key={`${opening.id}-${exploreLine}`}
+          openingId={opening.id}
+          openingName={opening.name}
+          color={color}
+          showEval={showEval}
+          onToggleEval={toggleEval}
           lines={lines}
           tree={tree}
-          request={drillReq}
-          onStudy={lineId => {
-            setStudyLine(lineId)
-            setLearnKey(k => k + 1)
-            setMode('learn')
-          }}
+          initialLineId={exploreLine}
+          onBack={() => go({ page: 'course', id: opening.id })}
+          onHome={() => go({ page: 'home' })}
+          onDrill={id => start('single', [id])}
         />
       )}
     </div>

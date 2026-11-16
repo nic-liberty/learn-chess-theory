@@ -10,3 +10,10 @@ export function getLines(opening: Opening): Line[] {
 }
 
 export type { Line, Opening } from './types'
+
+import { Chess } from 'chess.js'
+export function previewFen(opening: Opening): string {
+  const c = new Chess()
+  for (const m of parseMoves(opening.previewMoves)) c.move(m.san)
+  return c.fen()
+}

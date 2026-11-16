@@ -2,16 +2,16 @@ import type { Opening } from './types'
 
 // Shared move orders. Notes on shared moves only need to be written once.
 const SCOTCH =
-  '1.e4 e5 2.Nf3 Nc6 3.d4 {The Scotch. White strikes in the centre at once instead of 3.Bb5 or 3.Bc4.}'
-const MAIN = `${SCOTCH} 3...exd4 {Black almost always takes. 3...Nxd4 and 3...d6 are playable but passive.} 4.Nxd4 {White gets a free hand in the centre. Black usually hits back with 4...Nf6, 4...Bc5 or 4...Qh4.}`
+  '1.e4 e5 2.Nf3 Nc6 3.d4 {The Scotch. White strikes in the center at once instead of 3.Bb5 or 3.Bc4.}'
+const MAIN = `${SCOTCH} 3...exd4 {Black almost always takes. 3...Nxd4 and 3...d6 are playable but passive.} 4.Nxd4 {White gets a free hand in the center. Black usually hits back with 4...Nf6, 4...Bc5 or 4...Qh4.}`
 
 const SCHMIDT = `${MAIN} 4...Nf6 {The Schmidt Variation. Black attacks e4 straight away.}`
-const MIESES = `${SCHMIDT} 5.Nxc6 {White trades first so that e5 comes with tempo.} 5...bxc6 {Recapture toward the centre.} 6.e5 {Kicks the knight.} 6...Qe7 {Pins the e-pawn: White's queen must guard it.} 7.Qe2 7...Nd5 8.c4 {The Mieses Variation, the critical main line.}`
+const MIESES = `${SCHMIDT} 5.Nxc6 {White trades first so that e5 comes with tempo.} 5...bxc6 {Recapture toward the center.} 6.e5 {Kicks the knight.} 6...Qe7 {Pins the e-pawn: White's queen must guard it.} 7.Qe2 7...Nd5 8.c4 {The Mieses Variation, the critical main line.}`
 const SCOTCH_4N = `${SCHMIDT} 5.Nc3 {The Scotch Four Knights. Quieter: White just defends e4 and develops.}`
 
 const CLASSICAL = `${MAIN} 4...Bc5 {The Classical. The bishop eyes d4 and f2.}`
 const CL_BE3 = `${CLASSICAL} 5.Be3 {Defends the knight and offers to trade the strong bishop.} 5...Qf6 {Pressure on d4.} 6.c3 {Now d4 is solid.} 6...Nge7 {Not ...Nf6, so the f-pawn and queen stay connected.}`
-const CL_NXC6 = `${CLASSICAL} 5.Nxc6 {Kasparov's favourite. White removes the knight before Black can pile up on d4.} 5...Qf6 {The sharpest. Black threatens mate on f2.} 6.Qd2 {Guards f2 and keeps the option of Nc3.}`
+const CL_NXC6 = `${CLASSICAL} 5.Nxc6 {Kasparov's favorite. White removes the knight before Black can pile up on d4.} 5...Qf6 {The sharpest. Black threatens mate on f2.} 6.Qd2 {Guards f2 and keeps the option of Nc3.}`
 
 const STEINITZ = `${MAIN} 4...Qh4 {The Steinitz Variation. Black grabs at e4 but the queen comes out early.}`
 
@@ -24,8 +24,11 @@ export const scotch: Opening = {
   id: 'scotch',
   name: 'Scotch Game',
   eco: 'C44–C45',
+  side: 'white',
+  family: 'Open games (1.e4 e5)',
+  previewMoves: '1.e4 e5 2.Nf3 Nc6 3.d4',
   description:
-    '1.e4 e5 2.Nf3 Nc6 3.d4. An open, direct answer to 1...e5 that blows open the centre on move three.',
+    'Answer 1...e5 by opening the center on move three. Clear plans, quick development, and a favorite of Kasparov and Carlsen.',
   lines: [
     // ── Schmidt / Mieses ─────────────────────────────────────────
     {
@@ -62,7 +65,7 @@ export const scotch: Opening = {
       id: 'schmidt-6bd3',
       group: 'Schmidt (4...Nf6)',
       name: '6.Bd3',
-      pgn: `${SCHMIDT} 5.Nxc6 bxc6 6.Bd3 {Quieter than 6.e5. White defends e4 and castles.} 6...d5 {Black takes the centre.} 7.exd5 cxd5 8.O-O Be7 9.Re1 O-O {Black has a free game with the hanging pawns.}`,
+      pgn: `${SCHMIDT} 5.Nxc6 bxc6 6.Bd3 {Quieter than 6.e5. White defends e4 and castles.} 6...d5 {Black takes the center.} 7.exd5 cxd5 8.O-O Be7 9.Re1 O-O {Black has a free game with the hanging pawns.}`,
     },
     {
       id: 'scotch4n-main',
@@ -118,7 +121,7 @@ export const scotch: Opening = {
       id: 'classical-nxc6-bxc6',
       group: 'Classical (4...Bc5)',
       name: '5.Nxc6 bxc6',
-      pgn: `${CLASSICAL} 5.Nxc6 bxc6 {Simple recapture toward the centre.} 6.Bd3 d6 7.O-O Nf6 8.h3 O-O 9.Nc3 {White has slightly more space.}`,
+      pgn: `${CLASSICAL} 5.Nxc6 bxc6 {Simple recapture toward the center.} 6.Bd3 d6 7.O-O Nf6 8.h3 O-O 9.Nc3 {White has slightly more space.}`,
     },
     {
       id: 'classical-nb3',
@@ -138,7 +141,7 @@ export const scotch: Opening = {
       id: 'steinitz-nb5',
       group: 'Steinitz (4...Qh4)',
       name: '5.Nb5',
-      pgn: `${STEINITZ} 5.Nb5 {Counterattacks c7 at once.} 5...Bb4+ 6.Bd2 Qxe4+ 7.Be2 {White has given up the e-pawn for big development.} 7...Kd8 {Covers c7.} 8.O-O Bxd2 9.Nxd2 Qg6 10.Bf3 {Black's king is stuck in the centre: good compensation.}`,
+      pgn: `${STEINITZ} 5.Nb5 {Counterattacks c7 at once.} 5...Bb4+ 6.Bd2 Qxe4+ 7.Be2 {White has given up the e-pawn for big development.} 7...Kd8 {Covers c7.} 8.O-O Bxd2 9.Nxd2 Qg6 10.Bf3 {Black's king is stuck in the center: good compensation.}`,
     },
     {
       id: 'steinitz-nc3',
@@ -178,13 +181,13 @@ export const scotch: Opening = {
       id: 'third-nxd4',
       group: 'Other 3rd moves',
       name: '3...Nxd4',
-      pgn: `${SCOTCH} 3...Nxd4 {Trades knights but lets White's queen centralise.} 4.Nxd4 exd4 5.Qxd4 Ne7 6.Bc4 {White leads in development.}`,
+      pgn: `${SCOTCH} 3...Nxd4 {Trades knights but lets White's queen centralize.} 4.Nxd4 exd4 5.Qxd4 Ne7 6.Bc4 {White leads in development.}`,
     },
     {
       id: 'third-d6',
       group: 'Other 3rd moves',
       name: '3...d6',
-      pgn: `${SCOTCH} 3...d6 {Holds e5, but it's passive.} 4.Bb5 {Pins the knight and increases pressure on e5.} 4...Bd7 5.Nc3 Nf6 6.O-O {Black will soon have to give up the centre.}`,
+      pgn: `${SCOTCH} 3...d6 {Holds e5, but it's passive.} 4.Bb5 {Pins the knight and increases pressure on e5.} 4...Bd7 5.Nc3 Nf6 6.O-O {Black will soon have to give up the center.}`,
     },
 
     // ── Scotch Gambit ────────────────────────────────────────────
@@ -192,7 +195,7 @@ export const scotch: Opening = {
       id: 'gambit-max-lange',
       group: 'Scotch Gambit (4.Bc4)',
       name: 'Max Lange Attack',
-      pgn: `${GAMBIT_NF6} 5.O-O {Castle first, then hit the centre.} 5...Bc5 6.e5 d5 {The only good answer: counterattack the bishop.} 7.exf6 dxc4 8.Re1+ Be6 9.Ng5 Qd5 10.Nc3 Qf5 11.Nce4 O-O-O {Wild tactics. Both sides must know this by heart.}`,
+      pgn: `${GAMBIT_NF6} 5.O-O {Castle first, then hit the center.} 5...Bc5 6.e5 d5 {The only good answer: counterattack the bishop.} 7.exf6 dxc4 8.Re1+ Be6 9.Ng5 Qd5 10.Nc3 Qf5 11.Nce4 O-O-O {Wild tactics. Both sides must know this by heart.}`,
     },
     {
       id: 'gambit-5oo-nxe4',
@@ -210,7 +213,7 @@ export const scotch: Opening = {
       id: 'gambit-bc5-c3',
       group: 'Scotch Gambit (4.Bc4)',
       name: '4...Bc5 5.c3',
-      pgn: `${GAMBIT} 4...Bc5 {Holds on to d4.} 5.c3 {Attacks d4 and offers more material.} 5...Nf6 {Hits e4.} 6.e5 d5 7.Bb5 Ne4 8.cxd4 Bb6 9.Nc3 O-O 10.Be3 {White has the centre, Black has active pieces.}`,
+      pgn: `${GAMBIT} 4...Bc5 {Holds on to d4.} 5.c3 {Attacks d4 and offers more material.} 5...Nf6 {Hits e4.} 6.e5 d5 7.Bb5 Ne4 8.cxd4 Bb6 9.Nc3 O-O 10.Be3 {White has the center, Black has active pieces.}`,
     },
 
     // ── Göring Gambit ────────────────────────────────────────────
@@ -230,7 +233,7 @@ export const scotch: Opening = {
       id: 'goring-nf6',
       group: 'Göring Gambit (4.c3)',
       name: 'Declined: 4...Nf6',
-      pgn: `${GORING} 4...Nf6 {Counterattack on e4.} 5.e5 Nd5 6.cxd4 d6 {Black hits the e5-pawn.} 7.Bc4 Nb6 8.Bb5 {Keeps tension in the centre.}`,
+      pgn: `${GORING} 4...Nf6 {Counterattack on e4.} 5.e5 Nd5 6.cxd4 d6 {Black hits the e5-pawn.} 7.Bc4 Nb6 8.Bb5 {Keeps tension in the center.}`,
     },
   ],
 }

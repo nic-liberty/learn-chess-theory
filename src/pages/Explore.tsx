@@ -6,8 +6,8 @@ import type { Line } from '../openings'
 import { getEval } from '../lib/evals'
 import { playMoveSound } from '../lib/sound'
 import { moveLabel, pathTo, type TreeNode } from '../lib/tree'
-import Board from './Board'
-import LineList from './LineList'
+import Board from '../components/Board'
+import LineList from '../components/LineList'
 
 interface Props {
   openingId: string
@@ -16,14 +16,18 @@ interface Props {
   lines: Line[]
   tree: TreeNode
   initialLineId?: string
+  color: Color
+  openingName: string
+  onBack: () => void
+  onHome: () => void
   onDrill: (lineId: string) => void
 }
 
-export default function LearnView({ openingId, showEval, onToggleEval, lines, tree, initialLineId, onDrill }: Props) {
+export default function Explore({ openingId, showEval, onToggleEval, lines, tree, initialLineId, color, openingName, onBack, onHome, onDrill }: Props) {
   const lineById = useMemo(() => new Map(lines.map(l => [l.id, l])), [lines])
   const [node, setNode] = useState<TreeNode>(tree)
   const [lineId, setLineId] = useState<string>(initialLineId ?? lines[0].id)
-  const [orientation, setOrientation] = useState<Color>('white')
+  const [orientation, setOrientation] = useState<Color>(color)
 
   const go = useCallback((n: TreeNode, sound = true) => {
     setNode(n)
@@ -98,6 +102,14 @@ export default function LearnView({ openingId, showEval, onToggleEval, lines, tr
   }
 
   return (
+    <>
+    <nav className="crumbs page-crumbs">
+      <button className="link" onClick={onHome}>Openings</button>
+      <span>/</span>
+      <button className="link" onClick={onBack}>{openingName}</button>
+      <span>/</span>
+      <span>All lines</span>
+    </nav>
     <div className="layout">
       <aside className="side">
         <LineList lines={lines} selectedId={lineId} onSelect={selectLine} />
@@ -131,7 +143,7 @@ export default function LearnView({ openingId, showEval, onToggleEval, lines, tr
         <div className="panel-head">
           <div className="eyebrow">{line.group}</div>
           <h2>{line.name}</h2>
-          <button className="primary" onClick={() => onDrill(lineId)}>Drill this line</button>
+          <button className="primary" onClick={() => onDrill(lineId)}>Practice this line</button>
         </div>
 
         <div className="moves">
@@ -152,7 +164,7 @@ export default function LearnView({ openingId, showEval, onToggleEval, lines, tr
           <h4>{node.children.length ? 'Book moves' : 'End of line'}</h4>
           {node.children.length === 0 && (
             <p className="muted">
-              That's the end of the theory here. <button className="link" onClick={() => onDrill(lineId)}>Drill it</button> or go back to explore other branches.
+              That's the end of the theory here. <button className="link" onClick={() => onDrill(lineId)}>Practice it</button> or go back to explore other branches.
             </p>
           )}
           <ul>
@@ -167,8 +179,9 @@ export default function LearnView({ openingId, showEval, onToggleEval, lines, tr
           </ul>
         </div>
 
-        <p className="tip">Tip: right-click and drag to draw arrows. Right-click a square to circle it. Hold Shift, Ctrl or Alt for other colours.</p>
+        <p className="tip">Tip: right-click and drag to draw arrows. Right-click a square to circle it. Hold Shift, Ctrl or Alt for other colors.</p>
       </aside>
     </div>
+    </>
   )
 }

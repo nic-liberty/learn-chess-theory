@@ -16,6 +16,12 @@ export interface Opening {
   id: string
   name: string
   eco: string
+  /** Which side the course is for. Users can still train the other side. */
+  side: 'white' | 'black'
+  /** Family shown on the home page, e.g. "Open games (1.e4 e5)". */
+  family: string
+  /** Moves to the position shown on the opening's card. */
+  previewMoves: string
   description: string
   lines: LineDef[]
 }
