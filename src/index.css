@@ -1,0 +1,198 @@
+/* Colours follow lichess's dark theme. */
+:root {
+  --bg: #161512;
+  --bg-2: #262421;
+  --bg-3: #302e2c;
+  --line: #3d3a37;
+  --text: #bababa;
+  --text-strong: #e2e2e2;
+  --muted: #8a8784;
+  --blue: #3692e7;
+  --green: #629924;
+  --red: #cc3333;
+  --yellow: #d59020;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+body {
+  background: var(--bg) linear-gradient(to bottom, #2e2a24, var(--bg) 116px) no-repeat;
+  color: var(--text);
+  font: 15px/1.5 'Noto Sans', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+button:hover:not(:disabled) { background: #3a3835; color: var(--text-strong); }
+button:disabled { opacity: 0.4; cursor: default; }
+button.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+button.primary:hover { background: #4aa0f0; }
+button.danger { background: var(--red); border-color: var(--red); color: #fff; }
+button.link { background: none; border: 0; padding: 0; color: var(--blue); }
+.muted { color: var(--muted); }
+
+.app { display: flex; flex-direction: column; min-height: 100%; }
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 24px;
+}
+.brand { font-size: 20px; color: var(--text-strong); font-weight: 600; white-space: nowrap; }
+.logo { color: #fff; margin-right: 4px; }
+.opening-name { color: var(--text-strong); }
+.top select { background: var(--bg-3); color: var(--text); border: 1px solid var(--line); padding: 6px; border-radius: 4px; }
+.tabs { display: flex; gap: 2px; margin-left: auto; }
+.tabs button { border: 0; background: none; padding: 8px 16px; text-transform: uppercase; font-size: 13px; letter-spacing: 0.06em; }
+.tabs button.active { color: var(--text-strong); box-shadow: inset 0 -2px var(--yellow); }
+.icon { background: none; border: 0; font-size: 18px; padding: 4px 8px; }
+
+/* ── three-column layout, like a lichess study ───────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) auto minmax(260px, 360px);
+  gap: 20px;
+  padding: 8px 24px 24px;
+  align-items: start;
+  justify-content: center;
+}
+.side, .panel {
+  background: var(--bg-2);
+  border-radius: 4px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+  max-height: calc(100vh - 90px);
+  overflow: auto;
+}
+.center { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+
+/* ── board ─────────────────────────────────────────────────── */
+.board-wrap {
+  width: min(calc(100vh - 150px), calc(100vw - 720px), 720px);
+  min-width: 280px;
+  aspect-ratio: 1;
+}
+.board { width: 100%; height: 100%; }
+.board-wrap .cg-wrap { width: 100%; height: 100%; }
+cg-board { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
+/* Lichess "brown" board colours (chessground's bundled one is paler). */
+.cg-wrap cg-board { background-color: #f0d9b5; background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4IDgiIHNoYXBlLXJlbmRlcmluZz0iY3Jpc3BFZGdlcyI+PHJlY3Qgd2lkdGg9IjgiIGhlaWdodD0iOCIgZmlsbD0iI2YwZDliNSIvPjxnIGZpbGw9IiNiNTg4NjMiPjxyZWN0IHg9IjEiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSIzIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iNSIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjciIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSIwIiB5PSIxIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iMiIgeT0iMSIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjQiIHk9IjEiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSI2IiB5PSIxIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iMSIgeT0iMiIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjMiIHk9IjIiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSI1IiB5PSIyIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iNyIgeT0iMiIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjAiIHk9IjMiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSIyIiB5PSIzIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iNCIgeT0iMyIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjYiIHk9IjMiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSIxIiB5PSI0IiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iMyIgeT0iNCIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjUiIHk9IjQiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSI3IiB5PSI0IiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjIiIHk9IjUiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSI0IiB5PSI1IiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iNiIgeT0iNSIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjEiIHk9IjYiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSIzIiB5PSI2IiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iNSIgeT0iNiIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjciIHk9IjYiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSIwIiB5PSI3IiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PHJlY3QgeD0iMiIgeT0iNyIgd2lkdGg9IjEiIGhlaWdodD0iMSIvPjxyZWN0IHg9IjQiIHk9IjciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiLz48cmVjdCB4PSI2IiB5PSI3IiB3aWR0aD0iMSIgaGVpZ2h0PSIxIi8+PC9nPjwvc3ZnPg=='); }
+
+/* Coordinates inside the board edge, like lichess. */
+.board-wrap .cg-wrap coords { font-size: clamp(9px, 1.4vmin, 13px); font-weight: 700; opacity: 1; font-family: 'Noto Sans', sans-serif; }
+.board-wrap .cg-wrap coords.ranks { left: auto; right: 0; top: 0; width: 100%; text-align: right; }
+.board-wrap .cg-wrap coords.ranks coord { transform: none; padding: 1px 3px 0 0; }
+.board-wrap .cg-wrap coords.files { left: 0; bottom: 0; height: auto; text-transform: lowercase; }
+.board-wrap .cg-wrap coords.files coord { text-align: left; padding: 0 0 1px 3px; line-height: 1.3; }
+.board-wrap .cg-wrap coords coord { color: var(--sq-light); }
+.board-wrap .cg-wrap { --sq-light: #f0d9b5; --sq-dark: #b58863; }
+.board-wrap .cg-wrap coords.ranks:not(.black) coord:nth-child(odd),
+.board-wrap .cg-wrap coords.files:not(.black) coord:nth-child(even),
+.board-wrap .cg-wrap coords.ranks.black coord:nth-child(even),
+.board-wrap .cg-wrap coords.files.black coord:nth-child(odd) { color: var(--sq-dark); }
+
+.controls { display: flex; gap: 4px; }
+.controls button { min-width: 52px; font-size: 16px; padding: 6px 10px; }
+
+/* ── line list ─────────────────────────────────────────────── */
+.line-list section { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.line-list h3 {
+  margin: 6px 14px 2px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 600;
+}
+.line-list ul { list-style: none; margin: 0; padding: 0; }
+.line-list button {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 5px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+}
+.line-list button.active { background: var(--blue); color: #fff; }
+
+.dots { display: inline-flex; gap: 3px; flex-shrink: 0; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.dot.learning { background: var(--yellow); }
+.dot.due { background: var(--red); }
+.dot.learned { background: var(--green); }
+.dot.new { background: #55524f; }
+.dot.black { outline: 1px solid #000; }
+.dot.white { outline: 1px solid #ddd; }
+
+.side-head { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.seg { display: flex; }
+.seg button { flex: 1; border-radius: 0; padding: 6px 4px; font-size: 13px; }
+.seg button:first-child { border-radius: 4px 0 0 4px; }
+.seg button:last-child { border-radius: 0 4px 4px 0; }
+.seg button.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 10px; margin-top: 10px; font-size: 13px; }
+.stats .dot { margin-right: 4px; }
+.reset { padding: 12px 14px; display: flex; gap: 8px; align-items: center; font-size: 13px; flex-wrap: wrap; }
+.reset button { padding: 4px 10px; }
+
+/* ── right panel ───────────────────────────────────────────── */
+.panel > * { padding: 12px 16px; }
+.panel-head { border-bottom: 1px solid var(--line); }
+.panel-head h2 { margin: 2px 0 10px; font-size: 19px; color: var(--text-strong); font-weight: 500; }
+.eyebrow { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pill { background: var(--green); color: #fff; padding: 1px 8px; border-radius: 10px; text-transform: none; letter-spacing: 0; }
+
+.moves { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--line); font-family: 'Noto Sans', sans-serif; }
+.mv { background: none; border: 0; padding: 2px 6px; font-weight: 600; color: var(--text); }
+.mv .num { color: var(--muted); margin-right: 3px; font-weight: 400; }
+.mv.active { background: var(--blue); color: #fff; }
+.mv.active .num { color: #dbe9f7; }
+
+.comment { border-bottom: 1px solid var(--line); min-height: 70px; }
+.comment p { margin: 0; }
+
+.book h4 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.book ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.book li button { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 1px; }
+.book li button.main { border-color: var(--green); }
+.book li button strong { color: var(--text-strong); }
+.book li button .muted { font-size: 12px; }
+.book p { margin: 0; }
+
+.status { font-size: 17px; font-weight: 600; border-bottom: 1px solid var(--line); }
+.status.you { color: var(--text-strong); }
+.status.them { color: var(--muted); }
+.status.done { color: var(--green); }
+.feedback { font-size: 14px; }
+.feedback.bad { color: #ff6b6b; }
+.feedback.good { color: #8bc34a; }
+.feedback.info { color: var(--yellow); }
+.progress-bar { height: 6px; padding: 0 !important; margin: 0 16px; background: var(--bg-3); border-radius: 3px; overflow: hidden; }
+.progress-bar div { height: 100%; background: var(--green); transition: width 0.2s; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.tip { font-size: 12px; color: var(--muted); margin: 0; border-top: 1px solid var(--line); }
+
+/* ── narrower screens ──────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 1fr; padding: 8px 12px 24px; }
+  .center { order: -1; }
+  .side { order: 2; }
+  .brand { font-size: 17px; }
+  .opening-name { order: 5; flex: 1 0 60%; font-size: 14px; }
+  .icon { order: 6; }
+  .tabs button { padding: 6px 10px; }
+  .board-wrap { width: min(calc(100vw - 24px), 640px); min-width: 0; }
+  .side, .panel { max-height: none; }
+  .top { flex-wrap: wrap; gap: 10px; padding: 10px 12px; }
+}
