@@ -3,6 +3,8 @@ import type { Api } from 'chessground/api'
 import type { DrawShape } from 'chessground/draw'
 import type { Color, Key } from 'chessground/types'
 import { useEffect, useRef } from 'react'
+import type { Eval } from '../lib/evals'
+import EvalBar from './EvalBar'
 import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
@@ -21,6 +23,9 @@ export interface BoardProps {
   autoShapes?: DrawShape[]
   /** Bump this to force the board back to `fen` (e.g. after a wrong move). */
   resetKey?: number
+  /** Show the eval bar with this evaluation (undefined = position not analysed). */
+  showEval?: boolean
+  ev?: Eval
 }
 
 /**
@@ -73,8 +78,11 @@ export default function Board(props: BoardProps) {
   }, [props.autoShapes])
 
   return (
-    <div className="board-wrap">
-      <div ref={el} className="board" />
+    <div className="board-row">
+      {props.showEval && <EvalBar ev={props.ev} orientation={props.orientation} />}
+      <div className="board-wrap">
+        <div ref={el} className="board" />
+      </div>
     </div>
   )
 }

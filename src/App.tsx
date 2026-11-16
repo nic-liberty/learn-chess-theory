@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import DrillView from './components/DrillView'
 import LearnView from './components/LearnView'
 import { getLines, openings } from './openings'
+import { loadShowEval, saveShowEval } from './lib/evals'
 import { isMuted, setMuted } from './lib/sound'
 import { buildTree } from './lib/tree'
 
@@ -17,6 +18,14 @@ export default function App() {
   const [learnKey, setLearnKey] = useState(0)
   const [studyLine, setStudyLine] = useState<string>()
   const [muted, setMutedState] = useState(isMuted)
+  const [showEval, setShowEval] = useState(loadShowEval)
+  const toggleEval = useCallback(() => {
+    setShowEval(v => {
+      saveShowEval(!v)
+      return !v
+    })
+  }, [])
+  const evalProps = { openingId: opening.id, showEval, onToggleEval: toggleEval }
 
   return (
     <div className="app">
@@ -57,6 +66,7 @@ export default function App() {
       {mode === 'learn' ? (
         <LearnView
           key={`${opening.id}-${learnKey}`}
+          {...evalProps}
           lines={lines}
           tree={tree}
           initialLineId={studyLine}
@@ -68,6 +78,7 @@ export default function App() {
       ) : (
         <DrillView
           key={opening.id}
+          {...evalProps}
           lines={lines}
           tree={tree}
           request={drillReq}

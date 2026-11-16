@@ -3,19 +3,23 @@ import type { DrawShape } from 'chessground/draw'
 import type { Color, Key } from 'chessground/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Line } from '../openings'
+import { getEval } from '../lib/evals'
 import { playMoveSound } from '../lib/sound'
 import { moveLabel, pathTo, type TreeNode } from '../lib/tree'
 import Board from './Board'
 import LineList from './LineList'
 
 interface Props {
+  openingId: string
+  showEval: boolean
+  onToggleEval: () => void
   lines: Line[]
   tree: TreeNode
   initialLineId?: string
   onDrill: (lineId: string) => void
 }
 
-export default function LearnView({ lines, tree, initialLineId, onDrill }: Props) {
+export default function LearnView({ openingId, showEval, onToggleEval, lines, tree, initialLineId, onDrill }: Props) {
   const lineById = useMemo(() => new Map(lines.map(l => [l.id, l])), [lines])
   const [node, setNode] = useState<TreeNode>(tree)
   const [lineId, setLineId] = useState<string>(initialLineId ?? lines[0].id)
@@ -52,12 +56,13 @@ export default function LearnView({ lines, tree, initialLineId, onDrill }: Props
       else if (e.key === 'ArrowUp' || e.key === 'Home') toStart()
       else if (e.key === 'ArrowDown' || e.key === 'End') toEnd()
       else if (e.key === 'f') setOrientation(o => (o === 'white' ? 'black' : 'white'))
+      else if (e.key === 'e') onToggleEval()
       else return
       e.preventDefault()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [forward, back, toStart, toEnd])
+  }, [forward, back, toStart, toEnd, onToggleEval])
 
   const chess = useMemo(() => new Chess(node.fen), [node])
   const turn: Color = chess.turn() === 'w' ? 'white' : 'black'
@@ -109,6 +114,8 @@ export default function LearnView({ lines, tree, initialLineId, onDrill }: Props
           dests={dests}
           onMove={onMove}
           autoShapes={shapes}
+          showEval={showEval}
+          ev={getEval(openingId, node.fen)}
         />
         <div className="controls">
           <button onClick={toStart} title="Start (↑)">⏮</button>
@@ -116,6 +123,7 @@ export default function LearnView({ lines, tree, initialLineId, onDrill }: Props
           <button onClick={forward} title="Forward (→)">▶</button>
           <button onClick={toEnd} title="End of line (↓)">⏭</button>
           <button onClick={() => setOrientation(o => (o === 'white' ? 'black' : 'white'))} title="Flip board (f)">⇅</button>
+          <button onClick={onToggleEval} className={showEval ? 'on' : ''} title="Eval bar (e)">±</button>
         </div>
       </main>
 

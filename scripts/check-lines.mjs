@@ -2,9 +2,9 @@
 // that lose a lot of evaluation. Usage: node scripts/check-lines.mjs [stockfish-path]
 import { spawn } from 'node:child_process'
 import { Chess } from 'chess.js'
-import { scotch } from '../src/openings/scotch.ts'
+import { openings } from './openings.mjs'
 
-const openings = [scotch]
+
 const engine = process.argv[2]
 const THRESHOLD = 120
 

@@ -9,7 +9,8 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "check": "node scripts/check-lines.mjs",
-    "check:engine": "node scripts/check-lines.mjs /usr/games/stockfish"
+    "check:engine": "node scripts/check-lines.mjs /usr/games/stockfish",
+    "evals": "node scripts/compute-evals.mjs"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

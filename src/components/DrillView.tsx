@@ -4,6 +4,7 @@ import type { Key } from 'chessground/types'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Line } from '../openings'
 import { legalDests } from '../lib/chess'
+import { getEval } from '../lib/evals'
 import { playMoveSound, sounds } from '../lib/sound'
 import {
   getCard,
@@ -22,6 +23,9 @@ import LineList from './LineList'
 type SideSetting = DrillColor | 'both'
 
 interface Props {
+  openingId: string
+  showEval: boolean
+  onToggleEval: () => void
   lines: Line[]
   tree: TreeNode
   request?: { lineId: string; nonce: number }
@@ -56,7 +60,7 @@ function fmtWhen(t: number) {
   return `in ${Math.round(h / 24)} days`
 }
 
-export default function DrillView({ lines, tree, request, onStudy }: Props) {
+export default function DrillView({ openingId, showEval, onToggleEval, lines, tree, request, onStudy }: Props) {
   const lineById = useMemo(() => new Map(lines.map(l => [l.id, l])), [lines])
   const ids = useMemo(() => lines.map(l => l.id), [lines])
   const [side, setSideState] = useState<SideSetting>(loadSide)
@@ -318,7 +322,12 @@ export default function DrillView({ lines, tree, request, onStudy }: Props) {
           onMove={onMove}
           autoShapes={shapes}
           resetKey={resetKey}
+          showEval={showEval}
+          ev={getEval(openingId, chess.fen())}
         />
+        <div className="controls">
+          <button onClick={onToggleEval} className={showEval ? 'on' : ''} title="Eval bar">± Eval</button>
+        </div>
       </main>
 
       <aside className="panel">
