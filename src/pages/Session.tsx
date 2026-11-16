@@ -154,11 +154,11 @@ function Summary(p: Props & { results: Result[]; clean: number; scored: number }
             <span>lines learned</span>
           </div>
         </div>
-        {Number.isFinite(next) && <p className="muted">These lines come back for review {fmtWhen(next)}.</p>}
+        {Number.isFinite(next) && <p className="muted">These lines come back for practice {fmtWhen(next)}.</p>}
         <div className="summary-actions">
           {due > 0 ? (
             <button className="primary big" onClick={() => p.onNext('review')}>
-              Review {due} due {due === 1 ? 'line' : 'lines'}
+              Practice {due} due {due === 1 ? 'line' : 'lines'}
             </button>
           ) : stats.new > 0 ? (
             <button className="primary big" onClick={() => p.onNext('learn')}>

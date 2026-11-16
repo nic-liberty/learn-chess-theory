@@ -9,7 +9,6 @@ interface Props {
   opening: Opening
   lines: Line[]
   color: DrillColor
-  onColor: (c: DrillColor) => void
   onLearn: (ids: string[]) => void
   onReview: (ids: string[]) => void
   onPractice: (id: string) => void
@@ -40,7 +39,7 @@ function movePreview(line: Line, start: number) {
     .join(' ')
 }
 
-export default function Course({ opening, lines, color, onColor, onLearn, onReview, onPractice, onExplore, onHome }: Props) {
+export default function Course({ opening, lines, color, onLearn, onReview, onPractice, onExplore, onHome }: Props) {
   const ids = useMemo(() => lines.map(l => l.id), [lines])
   const [, setTick] = useState(0)
   const [confirmReset, setConfirmReset] = useState(false)
@@ -93,7 +92,7 @@ export default function Course({ opening, lines, color, onColor, onLearn, onRevi
           <div className="cta-row">
             {due.length > 0 && (
               <button className="primary big" onClick={() => onReview(due.slice(0, REVIEW_BATCH))}>
-                Review {Math.min(due.length, REVIEW_BATCH)} due
+                Practice {Math.min(due.length, REVIEW_BATCH)} due
               </button>
             )}
             {fresh.length > 0 && (
@@ -102,23 +101,11 @@ export default function Course({ opening, lines, color, onColor, onLearn, onRevi
               </button>
             )}
             {due.length === 0 && fresh.length === 0 && (
-              <p className="all-done">You know every line. Reviews will show up here when they’re due.</p>
+              <p className="all-done">You know every line. Practice sessions show up here when lines are due.</p>
             )}
             <button className="big ghost" onClick={() => onExplore()}>Browse all lines</button>
           </div>
         </div>
-      </section>
-
-      <section className="course-settings">
-        <span className="muted">Train as</span>
-        <div className="seg">
-          {(['white', 'black'] as DrillColor[]).map(c => (
-            <button key={c} className={color === c ? 'active' : ''} onClick={() => onColor(c)}>
-              {c === 'white' ? 'White' : 'Black'}
-            </button>
-          ))}
-        </div>
-        <span className="muted small">Progress is tracked separately for each side.</span>
       </section>
 
       <section className="chapters">
@@ -151,7 +138,7 @@ export default function Course({ opening, lines, color, onColor, onLearn, onRevi
                         <span className="line-name">{l.name}</span>
                         <span className="line-moves">…{movePreview(l, startPly)}</span>
                       </div>
-                      {st === 'learned' && <span className="muted small due-in">review {fmtDue(card?.due)}</span>}
+                      {st === 'learned' && <span className="muted small due-in">due {fmtDue(card?.due)}</span>}
                       <div className="row-actions">
                         <button onClick={() => onExplore(l.id)} title="See the moves and notes">View</button>
                         <button className="primary" onClick={() => onPractice(l.id)}>
@@ -170,7 +157,7 @@ export default function Course({ opening, lines, color, onColor, onLearn, onRevi
       <footer className="course-foot">
         {confirmReset ? (
           <>
-            <span>Erase your progress in this course (both sides)?</span>
+            <span>Erase your progress in this course?</span>
             <button
               className="danger"
               onClick={() => {

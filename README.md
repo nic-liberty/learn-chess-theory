@@ -6,10 +6,10 @@ Right now it covers the **Scotch Game** (1.e4 e5 2.Nf3 Nc6 3.d4): 32 lines acros
 
 ## Features
 
-- **Opening catalog.** Each opening is a course card with your progress and due reviews.
-- **Course page.** Lines grouped into chapters, each marked New, Learning, Due or Learned. One button starts the right session: review what's due, or learn the next 5 new lines. Train as White or Black, tracked separately.
+- **Opening catalog.** Each opening is a course for one side (White or Black), shown as a card with your progress, due lines and a "Try the first line" shortcut.
+- **Course page.** Lines grouped into chapters, each marked New, Learning, Due or Learned. One button starts the right session: review what's due, or learn the next 5 new lines.
 - **Learn sessions.** Each new line is played once with arrows and notes, then straight away from memory.
-- **Review sessions.** Due lines, no arrows. A wrong move snaps back with one more try, then the answer shows. Lines with slips come back again at the end of the session. A summary closes every session.
+- **Practice sessions.** Due lines, no arrows. A wrong move snaps back with one more try, then the answer shows. Lines with slips come back again at the end of the session. A summary closes every session.
 - **Spaced repetition.** Clean lines come back after 1, 3, 7, 16, 35, then 90 days; missed lines come back right away. Progress is saved in your browser, with no account needed.
 - **Browse all lines.** An explorer for every branch with notes, book-move arrows and keyboard navigation (arrow keys, `f` flips).
 - **Eval bar.** A lichess-style gauge beside the board shows Stockfish's evaluation of every book position. Toggle it with the ± button (or `e` in Learn mode).

@@ -18,7 +18,7 @@ interface Props {
   color: DrillColor
   /** Show the move with an arrow every turn (first time through a line). */
   guided: boolean
-  /** Label on the panel, e.g. "New line" or "Review". */
+  /** Label on the panel, e.g. "New line" or "Practice". */
   kind: 'new' | 'recall' | 'review' | 'retry'
   showEval: boolean
   onToggleEval: () => void
@@ -30,7 +30,7 @@ const OPP_DELAY = 450
 const KIND_LABEL = {
   new: 'New line · watch and play',
   recall: 'Now from memory',
-  review: 'Review',
+  review: 'Practice',
   retry: 'One more time',
 }
 

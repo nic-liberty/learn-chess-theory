@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { getLines, openings } from './openings'
 import { loadShowEval, saveShowEval } from './lib/evals'
-import { setTrainColor, trainColor } from './lib/prefs'
 import { useRoute } from './lib/route'
 import { isMuted, setMuted } from './lib/sound'
 import type { DrillColor } from './lib/srs'
@@ -24,8 +23,8 @@ export default function App() {
   const opening = route.page === 'home' ? undefined : openings.find(o => o.id === route.id)
   const lines = useMemo(() => (opening ? getLines(opening) : []), [opening])
   const tree = useMemo(() => buildTree(lines), [lines])
-  const [colorTick, setColorTick] = useState(0)
-  const color: DrillColor = opening ? trainColor(opening.id, opening.side) : 'white'
+  // Every course is for one side only.
+  const color: DrillColor = opening?.side ?? 'white'
   const [session, setSession] = useState<ActiveSession | null>(null)
   const [muted, setMutedState] = useState(isMuted)
   const [showEval, setShowEval] = useState(loadShowEval)
@@ -94,17 +93,19 @@ export default function App() {
       </header>
 
       {route.page === 'home' || !opening ? (
-        <Home onOpen={id => go({ page: 'course', id })} />
+        <Home
+          onOpen={id => go({ page: 'course', id })}
+          onTry={(id, lineId) => {
+            go({ page: 'course', id })
+            start('single', [lineId])
+          }}
+        />
       ) : route.page === 'course' ? (
         <Course
-          key={`${opening.id}-${colorTick}`}
+          key={opening.id}
           opening={opening}
           lines={lines}
           color={color}
-          onColor={c => {
-            setTrainColor(opening.id, c)
-            setColorTick(t => t + 1)
-          }}
           onLearn={ids => start('learn', ids)}
           onReview={ids => start('review', ids)}
           onPractice={id => start('single', [id])}

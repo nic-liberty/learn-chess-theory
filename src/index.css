@@ -272,8 +272,13 @@ h1, h2, h3 { color: var(--text-strong); text-wrap: balance; }
   background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px;
   transition: transform 0.15s, border-color 0.15s;
 }
-.opening-card:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--blue); background: var(--bg-2); }
+.opening-card:hover { border-color: #55524f; }
+.opening-card .card-board { padding: 0; border: 0; border-radius: 0; background: none; display: block; width: 100%; }
 .opening-card .mini-board { pointer-events: none; }
+.card-title { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-align: left; }
+.card-title:hover { background: none; color: var(--blue); }
+.card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.card-actions button { flex: 1; white-space: nowrap; }
 .card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
 .card-body h3 { margin: 0; font-size: 19px; font-weight: 600; }
 .card-body p { margin: 0; font-size: 13px; }
@@ -297,8 +302,6 @@ h1, h2, h3 { color: var(--text-strong); text-wrap: balance; }
 .mastery-legend .dot { margin-right: 5px; }
 .cta-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
 .all-done { margin: 0; color: var(--green); font-weight: 600; }
-.course-settings { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-2); border-radius: 8px; }
-.course-settings .seg button { padding: 5px 16px; flex: none; }
 
 .chapters { display: flex; flex-direction: column; gap: 16px; }
 .chapter { background: var(--bg-2); border-radius: 8px; overflow: hidden; }
